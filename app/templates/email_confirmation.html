@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Confirmation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .success { background-color: #d4edda; color: #155724; padding: 15px; border: 1px solid #c3e6cb; }
+        .error { background-color: #f8d7da; color: #721c24; padding: 15px; border: 1px solid #f5c6cb; }
+        .info { background-color: #d1ecf1; color: #0c5460; padding: 15px; border: 1px solid #bee5eb; }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="{{ status }}">
+            <h2>{{ message }}</h2>
+        </div>
+        {% if status == 'success' %}
+        <form action="http://127.0.0.1:8000/auth/login" method="post">
+        <button type="submit" class="button">Go to Login</button>
+        </form>
+        {% endif %}
+    </div>
+</body>
+</html>

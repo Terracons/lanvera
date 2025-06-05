@@ -1,0 +1,57 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Environment
+.env
+.venv/
+venv/
+env/
+ENV/
+*.env
+*.env.*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+
+# Logs
+*.log
+logs/
+
+# Testing
+.coverage
+htmlcov/
+.tox/
+.pytest_cache/
+
+# MyPy
+.mypy_cache/
+
+# FastAPI-specific
+instance/
+*.sqlite3
+
+# Docker
+*.pid
+*.bak
+*.swp
+docker-compose.override.yml
+
+# VS Code settings
+.vscode/
+
+# Pydantic cache
+__pydantic__/ 
