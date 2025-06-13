@@ -19,6 +19,7 @@ class UserRole(str, Enum):
 class UserCreate(BaseModel):
     username: str
     email: EmailStr
+    phone: str
     password: constr(min_length=6)
     role: UserRole = UserRole.user  # Optional, defaults to 'user'
 
@@ -31,6 +32,7 @@ class UserOut(BaseModel):
     id: int
     username: str
     email: EmailStr
+    phone: str
     is_verified: bool
     role: UserRole
 

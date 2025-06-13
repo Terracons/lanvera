@@ -37,6 +37,7 @@ def signup(user_data: UserCreate, request: Request, background_tasks: Background
     new_user = User(
         username=user_data.username,
         email=user_data.email,
+        phone = user_data.phone,
         password=hash_password(user_data.password),
         is_verified=False
     )

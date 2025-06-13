@@ -17,6 +17,7 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, nullable=False)
     email = Column(String, unique=True, index=True, nullable=False)
+    phone = Column(String, nullable=False)
     password = Column(String, nullable=False)
     is_verified = Column(Boolean, default=False)
     role = Column(Enum(UserRole), default=UserRole.user, nullable=False)
