@@ -22,7 +22,7 @@ app = FastAPI(
 app.add_middleware(SessionMiddleware, secret_key=os.getenv("SESSION_SECRET_KEY"))
 origins = [
     "http://localhost:3000",  # React/Vue frontend dev
-    "https://your-production-frontend.com"  # Replace in prod
+    "http://localhost:5173"  # Replace in prod
 ]
 
 app.add_middleware(
