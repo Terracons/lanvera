@@ -17,6 +17,9 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
 EMAIL = os.getenv("EMAIL")
 PASSWORD = os.getenv("PASSWORD")
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
+BACKEND_URL = os.getenv("BACKEND_URL", "http://127.0.0.1:8000")
+
 
 # Email Configuration
 conf = ConnectionConfig(
@@ -44,7 +47,7 @@ def generate_email_token(user: User):
 # ✅ Send Verification Email
 async def send_email_verification(user: User, request: Request):
     token = generate_email_token(user)
-    verification_link = f"{str(request.base_url).rstrip('/')}/auth/confirm-email/{token}"
+    verification_link = f"{BACKEND_URL}/auth/confirm-email/{token}"
     # Render email template with Jinja2
     email_body = templates.get_template("email_verification.html").render(
         username=user.username,
@@ -92,7 +95,7 @@ async def send_welcome_email(user_email: str, db_session: Session, background_ta
 
 
 async def send_reset_password_email(user_email: str, db_session: Session, token: str):
-    reset_link = f"http://127.0.0.1:8000/auth/reset-password?token={token}"
+    reset_link =  f"{FRONTEND_URL}/auth/reset-password?token={token}"
     user = db_session.query(User).filter(User.email == user_email).first()
 
     if not user:

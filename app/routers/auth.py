@@ -71,7 +71,10 @@ def confirm_email(request: Request, token: str, background_tasks: BackgroundTask
             status_msg = ("success", "Email verified successfully!")
 
         return templates.TemplateResponse("email_confirmation.html", {
-            "request": request, "status": status_msg[0], "message": status_msg[1]
+         "request": request,
+         "status": status_msg[0],
+         "message": status_msg[1],
+        "frontend_url": os.getenv("FRONTEND_URL", "http://localhost:5173")
         })
 
     except (JWTError, ValueError) as e:
