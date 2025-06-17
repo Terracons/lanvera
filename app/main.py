@@ -22,7 +22,8 @@ app = FastAPI(
 app.add_middleware(SessionMiddleware, secret_key=os.getenv("SESSION_SECRET_KEY"))
 origins = [
     "http://localhost:3000",  # React/Vue frontend dev
-    "http://localhost:5173"  # Replace in prod
+    "http://localhost:5173" , # Replace in prod
+     "https://lanvera.onrender.com",
 ]
 
 app.add_middleware(
@@ -40,3 +41,7 @@ app.include_router(messaging.router)
 @app.get("/")
 def read_root():
     return {"message": "🏡 Welcome to lanvera Real Estate Platform"}
+
+@app.head("/")
+def head_root():
+    return
