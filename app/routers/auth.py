@@ -13,7 +13,7 @@ import os
 import logging
 
 from app.database import get_db
-from app.schemas.schemas import UserCreate, UserOut, ForgotPasswordRequest, Token, BecomeAgency, UpdateProfile
+from app.schemas.schemas import UserCreate, UserOut, ForgotPasswordRequest, Token, BecomeAgency, UpdateProfile,LoginSchema
 from app.models.models import User
 from app.security import hash_password, verify_password, create_access_token, get_current_user
 from app.services.email import send_email_verification, send_welcome_email, send_reset_password_email
@@ -133,9 +133,9 @@ async def google_callback(request: Request, db: Session = Depends(get_db)):
 
 
 @router.post("/login", response_model=Token)
-def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.email == form_data.username).first()
-    if not user or not verify_password(form_data.password, user.password):
+def login(data: LoginSchema, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.email == data.email).first()
+    if not user or not verify_password(data.password, user.password):
         raise HTTPException(status_code=401, detail="Invalid credentials")
     if not user.is_verified:
         raise HTTPException(status_code=403, detail="Please verify your email first")
