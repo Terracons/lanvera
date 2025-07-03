@@ -29,6 +29,11 @@ ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 60))
 router = APIRouter(prefix="/auth", tags=["Auth"])
 templates = Jinja2Templates(directory="app/templates")
 
+from dotenv import load_dotenv
+load_dotenv()
+
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
+
 @router.post("/signup", response_model=UserOut)
 def signup(user_data: UserCreate, request: Request, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     if db.query(User).filter(User.email == user_data.email).first():
@@ -101,36 +106,33 @@ async def google_callback(request: Request, db: Session = Depends(get_db)):
         if not user_info:
             raise HTTPException(status_code=400, detail="User info not available from Google")
 
-        email = user_info['email']
-        username = user_info.get('name', email.split('@')[0])
+        email = user_info["email"]
+        username = user_info.get("name", email.split('@')[0])
 
-        # Check if user already exists
         user = db.query(User).filter(User.email == email).first()
-
         if not user:
             user = User(
                 username=username,
                 email=email,
-                password=hash_password(os.urandom(8).hex()),  # Random dummy password
+                password=hash_password(os.urandom(8).hex()),
                 is_verified=True
             )
             db.add(user)
             db.commit()
             db.refresh(user)
 
-        # Generate JWT access token
         access_token = create_access_token(
             data={"sub": user.email},
             expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
         )
 
-        response = RedirectResponse(url=f"/dashboard?token={access_token}")
-        return response
+        # ✅ Redirect to your frontend with token in query param
+        redirect_url = f"{FRONTEND_URL}/login-success?token={access_token}"
+        return RedirectResponse(url=redirect_url)
 
     except Exception as e:
         logger.error("Google auth failed: %s", str(e))
         raise HTTPException(status_code=400, detail="Google login failed")
-
 
 @router.post("/login", response_model=Token)
 def login(data: LoginSchema, db: Session = Depends(get_db)):
